@@ -138,7 +138,15 @@ $("#capture-btn").addEventListener("click", () => {
   canvas.toBlob(recognize, "image/jpeg", .92);
 });
 $("#recognize-file").addEventListener("change", (event) => { if (event.target.files[0]) recognize(event.target.files[0]); });
-$("#menu-btn").addEventListener("click", () => $(".sidebar").classList.toggle("open"));
+$("#menu-btn").addEventListener("click", () => {
+  const sidebar = $("#sidebar");
+  const isMobile = window.matchMedia("(max-width: 700px)").matches;
+  sidebar.classList.toggle(isMobile ? "open" : "collapsed");
+  $("#menu-btn").setAttribute(
+    "aria-expanded",
+    String(isMobile ? sidebar.classList.contains("open") : !sidebar.classList.contains("collapsed")),
+  );
+});
 $("#student-search").addEventListener("input", () => renderStudents(window.students || []));
 $("#history-filter").addEventListener("click", loadHistory);
 
