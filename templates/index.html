@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SmartFace Attendance</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark">✦</span><span>smart<span>face</span></span></div>
+    <p class="eyebrow">ATTENDANCE SUITE</p>
+    <nav>
+      <a href="#dashboard" data-page="dashboard" class="active"><b>⌂</b> Overview</a>
+      <a href="#live" data-page="live"><b>◉</b> Live attendance</a>
+      <a href="#register" data-page="register"><b>＋</b> Enroll student</a>
+      <a href="#students" data-page="students"><b>♙</b> Students</a>
+      <a href="#history" data-page="history"><b>▤</b> History</a>
+      <a href="#reports" data-page="reports"><b>↗</b> Reports</a>
+    </nav>
+    <div class="sidebar-foot"><span class="status-dot"></span><span>Local system online</span></div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <button id="menu-btn" class="icon-btn" aria-label="Menu">☰</button>
+      <div><p class="eyebrow" id="page-kicker">COMMAND CENTER</p><h1 id="page-title">Good day, admin</h1></div>
+      <div class="top-actions"><span class="date-pill" id="today-label"></span><a class="primary-btn small" href="#live">Start scan <span>→</span></a></div>
+    </header>
+    <div id="toast" class="toast"></div>
+
+    <section class="page active" id="page-dashboard">
+      <div class="hero"><div><p class="eyebrow light">LIVE SNAPSHOT</p><h2>Know who's in the room.</h2><p>Fast, private attendance powered by your local camera.</p></div><a href="#live" class="hero-btn">Open live scanner <span>↗</span></a></div>
+      <div class="stats-grid">
+        <div class="stat-card"><span class="stat-icon purple">♙</span><p>Total students</p><strong id="stat-students">—</strong><small>enrolled profiles</small></div>
+        <div class="stat-card"><span class="stat-icon teal">◉</span><p>Present today</p><strong id="stat-present">—</strong><small id="stat-rate">— attendance rate</small></div>
+        <div class="stat-card"><span class="stat-icon orange">◷</span><p>Total check-ins</p><strong id="stat-total">—</strong><small>all time</small></div>
+      </div>
+      <div class="content-grid"><div class="panel"><div class="panel-head"><div><p class="eyebrow">LATEST ACTIVITY</p><h3>Recent check-ins</h3></div><a href="#history" class="text-link">View history →</a></div><div id="recent-list" class="activity-list"></div></div><div class="panel quick"><p class="eyebrow">QUICK ACTIONS</p><a href="#register"><span class="quick-icon purple">＋</span><span><b>Enroll a student</b><small>Add a new face profile</small></span><i>→</i></a><a href="#live"><span class="quick-icon teal">◉</span><span><b>Start live attendance</b><small>Open your camera scanner</small></span><i>→</i></a></div></div>
+    </section>
+
+    <section class="page" id="page-live">
+      <div class="section-heading"><div><p class="eyebrow">LIVE ATTENDANCE</p><h2>Scan the room</h2><p>Use your webcam or upload a clear face photo to record a check-in.</p></div><label class="session-input">Session <input id="live-session" value="Morning class"></label></div>
+      <div class="scanner-layout"><div class="camera-card"><div class="camera-view"><video id="video" autoplay playsinline></video><canvas id="capture-canvas" hidden></canvas><div class="camera-placeholder" id="camera-placeholder"><span>◉</span><b>Camera is ready when you are</b><small>Allow camera access to begin scanning</small></div><div class="scan-frame"></div></div><div class="camera-controls"><button class="primary-btn" id="start-camera">Enable camera</button><button class="secondary-btn" id="capture-btn" disabled>Capture & recognize</button><label class="upload-btn">Upload image<input type="file" id="recognize-file" accept="image/*" hidden></label></div></div><div class="panel result-panel"><p class="eyebrow">SCAN RESULT</p><div id="recognition-result" class="empty-result"><span>✦</span><b>Waiting for a scan</b><small>Recognized students will appear here.</small></div><div class="tips"><b>For best results</b><span>• Face the camera directly</span><span>• Use even, bright lighting</span><span>• Keep only one face in frame</span></div></div></div>
+    </section>
+
+    <section class="page" id="page-register">
+      <div class="section-heading"><div><p class="eyebrow">STUDENT ENROLLMENT</p><h2>Create a face profile</h2><p>One clear image is all you need. The image stays on this computer.</p></div></div>
+      <div class="form-layout"><form id="register-form" class="panel form-card"><div class="form-row"><label>Full name <input name="name" required placeholder="e.g. Aisha Patel"></label><label>Student ID <input name="student_code" required placeholder="e.g. STU-1042"></label></div><label>Email <input name="email" type="email" placeholder="Optional contact email"></label><div class="dropzone" id="register-drop"><span>◎</span><b>Drop a face image here</b><small>or click to browse · JPG, PNG · max 8 MB</small><input type="file" name="image" id="register-file" accept="image/*" required hidden></div><button type="button" class="camera-upload" id="register-camera">◎ Capture from camera</button><img id="register-preview" class="image-preview" alt="Selected face preview" hidden><div class="form-note"><span>▣</span> Only a mathematical face descriptor is used for matching. No cloud service is involved.</div><button class="primary-btn" type="submit">Enroll student <span>→</span></button></form><div class="panel guide-card"><p class="eyebrow">PHOTO GUIDE</p><div class="guide-illustration">◯</div><h3>Make recognition effortless</h3><ul><li>Look straight at the camera</li><li>Remove sunglasses and masks</li><li>Choose a sharp, well-lit photo</li><li>Keep one person in frame</li></ul></div></div>
+    </section>
+
+    <section class="page" id="page-students">
+      <div class="section-heading"><div><p class="eyebrow">DIRECTORY</p><h2>Students</h2><p>Manage enrolled face profiles.</p></div><a href="#register" class="primary-btn">＋ Enroll student</a></div>
+      <div class="panel table-panel"><div class="table-toolbar"><input id="student-search" placeholder="⌕  Search by name or ID"><span id="student-count"></span></div><div class="table-wrap"><table><thead><tr><th>STUDENT</th><th>STUDENT ID</th><th>EMAIL</th><th>CHECK-INS</th><th></th></tr></thead><tbody id="students-table"></tbody></table></div><div id="students-empty" class="empty-state" hidden>No students yet. Enroll your first student to get started.</div></div>
+    </section>
+
+    <section class="page" id="page-history">
+      <div class="section-heading"><div><p class="eyebrow">RECORDS</p><h2>Attendance history</h2><p>Every successful check-in, in one place.</p></div><a id="export-link" class="secondary-btn" href="/api/export">⇩ Export CSV</a></div>
+      <div class="panel table-panel"><div class="filter-bar"><label>From <input type="date" id="history-start"></label><label>To <input type="date" id="history-end"></label><button class="secondary-btn" id="history-filter">Apply filters</button></div><div class="table-wrap"><table><thead><tr><th>DATE & TIME</th><th>STUDENT</th><th>STUDENT ID</th><th>SESSION</th></tr></thead><tbody id="history-table"></tbody></table></div><div id="history-empty" class="empty-state" hidden>No check-ins match these filters.</div></div>
+    </section>
+
+    <section class="page" id="page-reports">
+      <div class="section-heading"><div><p class="eyebrow">INSIGHTS</p><h2>Reports</h2><p>A quick pulse on your attendance data.</p></div></div>
+      <div class="report-grid"><div class="panel report-highlight"><p class="eyebrow">TODAY'S RATE</p><strong id="report-rate">0%</strong><p>Based on enrolled students</p><div class="progress"><i id="report-progress"></i></div></div><div class="panel"><p class="eyebrow">SYSTEM SETTINGS</p><h3>Recognition threshold</h3><p class="muted">Lower values are stricter. This local demo uses normalized face-region descriptors.</p><div class="threshold"><strong id="threshold-value">—</strong><span>distance threshold</span></div><a class="text-link" href="https://github.com/opencv/opencv" target="_blank" rel="noreferrer">Powered by OpenCV ↗</a></div><div class="panel report-tip"><span>✦</span><h3>Privacy by design</h3><p>Images and descriptors are stored locally in SQLite. Nothing leaves this computer.</p></div></div>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
